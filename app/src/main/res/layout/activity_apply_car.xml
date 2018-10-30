@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query1"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query1"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query2"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query2"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query3"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query3"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query4"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query4"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query6"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query6"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query7"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query7"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query8"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query8"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <Button
+                   android:id="@+id/btn_query9"
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:layout_alignParentRight="true"
+                   android:background="@drawable/btn_background"
+                   android:text="XXX"
+                   android:textColor="@color/white"
+                   android:textSize="13sp" />
+
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="10dp"
+                   android:layout_toLeftOf="@id/btn_query9"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="输入XXX"
+                       android:imeOptions="actionDone"
+                       android:inputType="phone"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+
+           <android.support.v7.widget.RecyclerView
+               android:id="@+id/recyclerView"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:choiceMode="singleChoice"
+               android:divider="@null"
+               android:fadingEdge="none"
+               android:listSelector="@android:color/transparent"
+               android:scrollbarStyle="outsideOverlay"
+               app:layoutManager="android.support.v7.widget.GridLayoutManager"
+               app:spanCount="4"
+               tools:listitem="@layout/list_item_image"/>
+       </LinearLayout>
+   </ScrollView>
+</LinearLayout>
