@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity {
         // 3. 启动前台Service
         startDaemonService();
         // 4. 启动播放音乐Service
-        startPlayMusicService();
+//        startPlayMusicService();
         //APP版本更新检查
 //        checkVersion();
     }

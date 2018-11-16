@@ -8,7 +8,9 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
-
+import com.clfsjkj.govcar.imageloader.GlideImageLoader;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.view.CropImageView;
 
 
 public final class MainApplication extends Application {
@@ -16,6 +18,7 @@ public final class MainApplication extends Application {
     private static MainApplication application;
     private static Context mContext;
     private static LocalBroadcastManager localBroadcastManager;
+    public static int maxImgCount = 8;               //允许选择图片最大数
 
     @Override
     public void onCreate() {
@@ -27,6 +30,22 @@ public final class MainApplication extends Application {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+        initImagePicker();
+    }
+
+
+    private void initImagePicker() {
+        ImagePicker imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());   //设置图片加载器
+        imagePicker.setShowCamera(true);                      //显示拍照按钮
+        imagePicker.setCrop(false);                           //允许裁剪（单选才有效）
+        imagePicker.setSaveRectangle(false);                   //是否按矩形区域保存
+        imagePicker.setSelectLimit(maxImgCount);              //选中数量限制
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+        imagePicker.setFocusWidth(800);                       //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setFocusHeight(800);                      //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setOutPutX(1000);                         //保存文件的宽度。单位像素
+        imagePicker.setOutPutY(1000);                         //保存文件的高度。单位像素
     }
 
     public static Context getContext() {

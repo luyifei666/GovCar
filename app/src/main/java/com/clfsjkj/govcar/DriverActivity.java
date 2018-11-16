@@ -21,7 +21,7 @@ public class DriverActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver);
-        swipe_right = findViewById(R.id.swipe_right);
+        swipe_right = (SlideRightViewDragHelper) findViewById(R.id.swipe_right);
         swipe_right.setOnReleasedListener(new SlideRightViewDragHelper.OnReleasedListener() {
             @Override
             public void onReleased() {
@@ -30,7 +30,7 @@ public class DriverActivity extends BaseActivity {
                 Toast.makeText(DriverActivity.this,"滑动完成",Toast.LENGTH_SHORT).show();
             }
         });
-        start_guide = findViewById(R.id.start_guide);
+        start_guide = (TextView) findViewById(R.id.start_guide);
         start_guide.setText("开始导航");
         start_guide.setOnClickListener(new View.OnClickListener() {
             @Override

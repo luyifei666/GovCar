@@ -230,20 +230,49 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     }
 
     public void searchButtonProcess(String keystr, String citystr) {
-        searchType = 1;
-        mPoiSearch.searchInCity((new PoiCitySearchOption())
-                .city(citystr)
-                .keyword(keystr)
-                .pageNum(loadIndex)
-                .scope(1));
 
-        LatLng southwest = new LatLng(mCurrentLat - 5, mCurrentLon - 5);
-        LatLng northeast = new LatLng(mCurrentLat + 5, mCurrentLon + 5);
-        searchBound = new LatLngBounds.Builder().include(southwest).include(northeast).build();
-        mPoiSearch.searchInBound(new PoiBoundSearchOption()
-                .bound(searchBound)
-                .keyword(keystr)
-                .scope(1));
+        List<String> mList = new ArrayList<>();
+        mList.add("昆明市");
+        mList.add("大理白族自治州");
+        mList.add("楚雄彝族自治州");
+        mList.add("红河哈尼族彝族自治州");
+        mList.add("文山壮族苗族自治州");
+        mList.add("曲靖市");
+        mList.add("玉溪市");
+        mList.add("昭通市");
+        mList.add("保山市");
+        mList.add("丽江市");
+        mList.add("普洱市");
+        mList.add("临沧市");
+        mList.add("德宏傣族景颇族自治州");
+        mList.add("怒江傈僳族自治州");
+        mList.add("迪庆藏族自治州");
+        mList.add("西双版纳傣族自治州");
+
+        for (int i = 0; i < mList.size(); i++) {
+            searchType = 1;
+            mPoiSearch.searchInCity((new PoiCitySearchOption())
+                    .city(mList.get(i).toString())
+                    .keyword(keystr)
+                    .pageNum(loadIndex)
+                    .scope(1));
+        }
+
+
+//        searchType = 1;
+//        mPoiSearch.searchInCity((new PoiCitySearchOption())
+//                .city(citystr)
+//                .keyword(keystr)
+//                .pageNum(loadIndex)
+//                .scope(1));
+
+//        LatLng southwest = new LatLng(mCurrentLat - 5, mCurrentLon - 5);
+//        LatLng northeast = new LatLng(mCurrentLat + 5, mCurrentLon + 5);
+//        searchBound = new LatLngBounds.Builder().include(southwest).include(northeast).build();
+//        mPoiSearch.searchInBound(new PoiBoundSearchOption()
+//                .bound(searchBound)
+//                .keyword(keystr)
+//                .scope(1));
     }
 
     /**
@@ -328,6 +357,20 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
                 .start();
     }
 
+    /**
+     * 获取POI详情搜索结果，得到searchPoiDetail返回的搜索结果
+     * V5.2.0版本之后，还方法废弃，使用{@link #onGetPoiDetailResult(PoiDetailSearchResult)}代替
+     * @param result    POI详情检索结果
+     */
+    public void onGetPoiDetailResult(PoiDetailResult result) {
+        if (result.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(BaiduMapPoiActivity.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(BaiduMapPoiActivity.this,
+                    result.getName() + ": " + result.getAddress(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * 获取POI搜索结果，包括searchInCity，searchNearby，searchInBound返回的搜索结果
@@ -393,18 +436,6 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
      *
      * @param result POI详情检索结果
      */
-    public void onGetPoiDetailResult(PoiDetailResult result) {
-        if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(BaiduMapPoiActivity.this, "抱歉，未找到结果398", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(BaiduMapPoiActivity.this,
-                    result.getName() + ": " + result.getAddress(),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    @Override
     public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
         if (poiDetailSearchResult.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(BaiduMapPoiActivity.this, "抱歉，未找到结果410", Toast.LENGTH_SHORT).show();

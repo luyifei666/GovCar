@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ApplyRecordActivity">
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="4dp">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/btn_query"-->
+            <!--style="?android:attr/borderlessButtonStyle"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="手机号码"-->
+            <!--android:textSize="13sp" />-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_weight="2"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_toLeftOf="@id/btn_query"-->
+            <!--android:background="@drawable/search_bg">-->
+
+            <!--<com.clfsjkj.govcar.customerview.MClearEditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:background="@null"-->
+                <!--android:hint="输入XXX"-->
+                <!--android:imeOptions="actionDone"-->
+                <!--android:inputType="phone"-->
+                <!--android:maxLines="1"-->
+                <!--android:textSize="13sp" />-->
+        <!--</RelativeLayout>-->
+
+        <!--<CheckBox-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="2"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="添加随行人员"/>-->
+
+    <!--</LinearLayout>-->
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_marginLeft="50px"
+        android:layout_marginTop="30px"
+        android:includeFontPadding="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="乘车人数"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/ed1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:minWidth="150px"
+        android:textColor="#333"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toRightOf="@id/tv1"
+        app:layout_constraintBottom_toBottomOf="@id/tv1" />
+
+
+    <CheckBox
+        android:id="@+id/ck1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/ed1"
+        app:layout_constraintLeft_toRightOf="@id/ed1" />
+
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_marginLeft="70px"
+        android:layout_marginTop="30px"
+        android:includeFontPadding="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="添加随行人员"
+        app:layout_constraintLeft_toLeftOf="@+id/ck1"
+        app:layout_constraintTop_toTopOf="@+id/ck1"
+        />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:includeFontPadding="false"
+        android:text="用车性质"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv1"
+        app:layout_constraintTop_toTopOf="@id/tv1" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:minWidth="450px"
+        android:textColor="#333"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toRightOf="@id/tv2"
+        app:layout_constraintBottom_toBottomOf="@id/tv2" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:includeFontPadding="false"
+        android:text="车型选择"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv2"
+        app:layout_constraintTop_toTopOf="@id/tv2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:minWidth="450px"
+        android:textColor="#333"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toRightOf="@id/tv4"
+        app:layout_constraintBottom_toBottomOf="@id/tv4" />
+
+    <TextView
+        android:id="@+id/tv5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:includeFontPadding="false"
+        android:text="申请数量"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv4"
+        app:layout_constraintTop_toTopOf="@id/tv4" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:minWidth="450px"
+        android:textColor="#333"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toRightOf="@id/tv5"
+        app:layout_constraintBottom_toBottomOf="@id/tv5" />
+
+    <TextView
+        android:id="@+id/tv6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:text="起始地"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv5"
+        app:layout_constraintTop_toTopOf="@id/tv5"/>
+
+    <EditText
+        android:id="@+id/et_XXX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:minWidth="450px"
+        android:textColor="#333"
+        android:hint="@string/app_name"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintLeft_toRightOf="@id/tv6"
+        app:layout_constraintBottom_toBottomOf="@id/tv6"/>
+
+
+    <LinearLayout
+        android:id="@+id/customer_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv6"
+        app:layout_constraintTop_toTopOf="@id/tv6">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/customer_ll"/>
+
+
+</android.support.constraint.ConstraintLayout>

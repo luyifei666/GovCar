@@ -61,32 +61,67 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query1"
+               <TextView
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
+                   android:text="用车人"
+                   android:textSize="13sp"
+                   android:gravity="left"/>
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="270dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query1"
                    android:background="@drawable/search_bg">
 
                    <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_ycr"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
+                       android:hint="请输入用车人姓名"
+                       android:imeOptions="actionDone"
+                       android:inputType="text"
+                       android:maxLines="1"
+                       android:textSize="13sp" />
+               </RelativeLayout>
+
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <TextView
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:text="手机号码"
+                   android:textSize="13sp"
+                   android:gravity="left" />
+
+               <RelativeLayout
+                   android:layout_width="270dp"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_marginRight="10dp"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_phone"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="请输入手机号码"
                        android:imeOptions="actionDone"
                        android:inputType="phone"
                        android:maxLines="1"
@@ -100,34 +135,89 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query2"
+               <TextView
+                   android:id="@+id/tx_num"
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
+                   android:text="乘车人数"
                    android:textSize="13sp" />
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="80dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_marginLeft="17dp"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query2"
-                   android:background="@drawable/search_bg">
+                   android:layout_toRightOf="@+id/tx_num"
+                   android:background="@drawable/search_bg"
+                   android:gravity="left">
 
                    <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_num"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
                        android:imeOptions="actionDone"
-                       android:inputType="phone"
+                       android:inputType="number"
+                       android:maxLines="1"
+                       android:textSize="13sp"/>
+               </RelativeLayout>
+
+               <CheckBox
+                   android:id="@+id/ck_suixing"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   android:layout_marginEnd="30dp"
+                   android:layout_marginRight="30dp"
+                   android:text="添加随行人员"/>
+
+           </RelativeLayout>
+
+           <LinearLayout
+               android:id="@+id/customer_ll"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+
+           </LinearLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="4dp">
+
+               <TextView
+                   style="?android:attr/borderlessButtonStyle"
+                   android:layout_width="80dp"
+                   android:layout_height="40dp"
+                   android:text="用车性质"
+                   android:textSize="13sp"
+                   android:gravity="left"/>
+
+               <RelativeLayout
+                   android:layout_width="270dp"
+                   android:layout_height="40dp"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_marginRight="10dp"
+                   android:background="@drawable/search_bg">
+
+                   <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_xingzhi"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                       android:background="@null"
+                       android:hint="请输入用车性质"
+                       android:imeOptions="actionDone"
+                       android:inputType="text"
                        android:maxLines="1"
                        android:textSize="13sp" />
                </RelativeLayout>
@@ -139,34 +229,32 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query3"
+               <TextView
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
+                   android:text="选择车辆"
+                   android:textSize="13sp"
+                   android:gravity="left"/>
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="270dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query3"
                    android:background="@drawable/search_bg">
 
-                   <com.clfsjkj.govcar.customerview.MClearEditText
+                   <Spinner
+                       android:id="@+id/spinner_car"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
+                       android:hint="请选择车辆"
                        android:imeOptions="actionDone"
-                       android:inputType="phone"
+                       android:inputType="text"
                        android:maxLines="1"
                        android:textSize="13sp" />
                </RelativeLayout>
@@ -178,34 +266,32 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query4"
+               <TextView
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
+                   android:text="用车区域"
+                   android:textSize="13sp"
+                   android:gravity="left" />
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="270dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query4"
                    android:background="@drawable/search_bg">
 
                    <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_quyu"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
+                       android:hint="请选择用车区域"
                        android:imeOptions="actionDone"
-                       android:inputType="phone"
+                       android:inputType="text"
                        android:maxLines="1"
                        android:textSize="13sp" />
                </RelativeLayout>
@@ -217,34 +303,32 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query6"
+               <TextView
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
+                   android:text="出发地"
+                   android:textSize="13sp"
+                   android:gravity="left" />
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="270dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query6"
                    android:background="@drawable/search_bg">
 
                    <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_start"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
+                       android:hint="请选择出发地"
                        android:imeOptions="actionDone"
-                       android:inputType="phone"
+                       android:inputType="text"
                        android:maxLines="1"
                        android:textSize="13sp" />
                </RelativeLayout>
@@ -256,34 +340,32 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query7"
+               <TextView
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
+                   android:text="途径地"
+                   android:textSize="13sp"
+                   android:gravity="left"/>
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="270dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query7"
                    android:background="@drawable/search_bg">
 
                    <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_tujingdi"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
+                       android:hint="请选择出发地"
                        android:imeOptions="actionDone"
-                       android:inputType="phone"
+                       android:inputType="text"
                        android:maxLines="1"
                        android:textSize="13sp" />
                </RelativeLayout>
@@ -295,73 +377,32 @@
                android:layout_height="wrap_content"
                android:padding="4dp">
 
-               <Button
-                   android:id="@+id/btn_query8"
+               <TextView
                    style="?android:attr/borderlessButtonStyle"
                    android:layout_width="80dp"
                    android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
+                   android:text="目的地"
+                   android:textSize="13sp"
+                   android:gravity="left" />
 
                <RelativeLayout
-                   android:layout_width="match_parent"
+                   android:layout_width="270dp"
                    android:layout_height="40dp"
                    android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
                    android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query8"
                    android:background="@drawable/search_bg">
 
                    <com.clfsjkj.govcar.customerview.MClearEditText
+                       android:id="@+id/et_end"
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_marginLeft="10dp"
                        android:layout_marginRight="10dp"
                        android:background="@null"
-                       android:hint="输入XXX"
+                       android:hint="请选择出发地"
                        android:imeOptions="actionDone"
-                       android:inputType="phone"
-                       android:maxLines="1"
-                       android:textSize="13sp" />
-               </RelativeLayout>
-
-           </RelativeLayout>
-
-           <RelativeLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:padding="4dp">
-
-               <Button
-                   android:id="@+id/btn_query9"
-                   style="?android:attr/borderlessButtonStyle"
-                   android:layout_width="80dp"
-                   android:layout_height="40dp"
-                   android:layout_alignParentRight="true"
-                   android:background="@drawable/btn_background"
-                   android:text="XXX"
-                   android:textColor="@color/white"
-                   android:textSize="13sp" />
-
-               <RelativeLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="40dp"
-                   android:layout_centerVertical="true"
-                   android:layout_marginRight="10dp"
-                   android:layout_toLeftOf="@id/btn_query9"
-                   android:background="@drawable/search_bg">
-
-                   <com.clfsjkj.govcar.customerview.MClearEditText
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent"
-                       android:layout_marginLeft="10dp"
-                       android:layout_marginRight="10dp"
-                       android:background="@null"
-                       android:hint="输入XXX"
-                       android:imeOptions="actionDone"
-                       android:inputType="phone"
+                       android:inputType="text"
                        android:maxLines="1"
                        android:textSize="13sp" />
                </RelativeLayout>

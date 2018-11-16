@@ -1,16 +1,29 @@
 package com.clfsjkj.govcar;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.clfsjkj.govcar.adapter.ImagePickerAdapter;
 import com.clfsjkj.govcar.base.BaseActivity;
+import com.clfsjkj.govcar.customerview.MClearEditText;
 import com.clfsjkj.govcar.imageloader.GlideImageLoader;
 import com.clfsjkj.govcar.imageloader.SelectDialog;
 import com.lzy.imagepicker.ImagePicker;
@@ -37,16 +50,29 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     RecyclerView mRecyclerView;
     @BindView(R.id.btn_query)
     Button mBtnQuery;
+    @BindView(R.id.customer_ll)
+    LinearLayout mCustomerLl;
+    @BindView(R.id.ck_suixing)
+    CheckBox mCkSuixing;
+    @BindView(R.id.spinner_car)
+    Spinner mSpinnerCar;
 
     private ImagePickerAdapter adapter;
     private ArrayList<ImageItem> selImageList; //当前选择的所有图片
     private int maxImgCount = 8;               //允许选择图片最大数
+    private MClearEditText mEditText;
+    private TextView mTextView;
+    private ImageView mImageViewAdd, mImageViewDel;
+    private Context mContext;
+    private List<String> mSpinnerCarList = new ArrayList<String>();
+    private ArrayAdapter<String> mSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_car);
         ButterKnife.bind(this);
+        mContext = this;
         initMyToolBar();
         //最好放到 Application oncreate执行
         initImagePicker();
@@ -100,6 +126,37 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
 //        mRecyclerView.setFocusable(false);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapter);
+        mCkSuixing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    CreateView();
+                } else {
+                    mCustomerLl.removeAllViews();
+                }
+            }
+        });
+
+        mSpinnerCar.setGravity(Gravity.CENTER);//居中
+        mSpinnerCarList.add("请选择");
+        mSpinnerCarList.add("越野车");
+        mSpinnerCarList.add("轿车");
+        mSpinnerCarList.add("商务车");
+        mSpinnerCarList.add("大客车");
+        mSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mSpinnerCarList);
+        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerCar.setAdapter(mSpinnerAdapter);
+        mSpinnerCar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
     private SelectDialog showDialog(SelectDialog.SelectDialogListener listener, List<String> names) {
@@ -196,7 +253,131 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
 
     @OnClick(R.id.btn_query)
     public void onViewClicked() {
-        Intent it = new Intent(ApplyCarActivity.this,BaiduMapPoiActivity.class);
+        Intent it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
         startActivity(it);
     }
+
+
+    private void CreateView() {
+        LinearLayout mLL = addView();
+        mCustomerLl.addView(mLL);
+    }
+
+    private LinearLayout addView() {
+
+        //1 画一个HORIZONTAL的LinearLayout，装一个VERTICAL的LinearLayout和一个ImageView
+        final LinearLayout layout_sub_Lin = new LinearLayout(this);
+        layout_sub_Lin.setBackgroundColor(Color.TRANSPARENT);
+        layout_sub_Lin.setOrientation(LinearLayout.HORIZONTAL);
+//        layout_sub_Lin.setPadding(8, 6, 8, 4);
+
+        final LinearLayout mLeftView = new LinearLayout(this);
+        LinearLayout.LayoutParams layoutParamsOfLeft = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mLeftView.setBackgroundColor(Color.TRANSPARENT);
+        mLeftView.setOrientation(LinearLayout.VERTICAL);
+        mLeftView.setLayoutParams(layoutParamsOfLeft);
+        layout_sub_Lin.addView(mLeftView);
+
+        mImageViewAdd = new ImageView(this);
+        LinearLayout.LayoutParams layoutParamsOfRightOne = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsOfRightOne.setMargins(px2dip(mContext, 80), px2dip(mContext, 80), px2dip(mContext, 80), px2dip(mContext, 80));
+        mImageViewAdd.setBackgroundResource(R.drawable.ic_add);
+        mImageViewAdd.setLayoutParams(layoutParamsOfRightOne);
+        mImageViewAdd.setPadding(10, 10, 10, 10);
+        layout_sub_Lin.addView(mImageViewAdd);
+
+        mImageViewDel = new ImageView(this);
+        LinearLayout.LayoutParams layoutParamsOfRightTwo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsOfRightTwo.setMargins(px2dip(mContext, 20), px2dip(mContext, 80), px2dip(mContext, 80), px2dip(mContext, 80));
+        mImageViewDel.setBackgroundResource(R.drawable.ic_del);
+        mImageViewDel.setLayoutParams(layoutParamsOfRightTwo);
+        mImageViewDel.setPadding(40, 10, 10, 10);
+        layout_sub_Lin.addView(mImageViewDel);
+
+        //2、在mLeftView里装2个HORIZONTAL的LinearLayout：随行人姓名、随行人电话
+        final LinearLayout mChildOne = new LinearLayout(this);
+        mChildOne.setBackgroundColor(Color.TRANSPARENT);
+        mChildOne.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams layoutParamsOfmChildOne = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsOfmChildOne.setMargins(sp2px(mContext, 15), 4, 4, 4);
+        mChildOne.setLayoutParams(layoutParamsOfmChildOne);
+        mLeftView.addView(mChildOne);
+
+        final LinearLayout mChildTwo = new LinearLayout(this);
+        mChildTwo.setBackgroundColor(Color.TRANSPARENT);
+        mChildTwo.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams layoutParamsOfmChildTwo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsOfmChildTwo.setMargins(sp2px(mContext, 15), 4, 4, 4);
+        mChildTwo.setLayoutParams(layoutParamsOfmChildTwo);
+        mLeftView.addView(mChildTwo);
+
+        //3、随行人姓名装入mChildOne，随行人电话装入mChildTwo
+        mTextView = new TextView(this);
+        mTextView.setGravity(Gravity.CENTER | Gravity.LEFT);
+        mTextView.setText("随行人姓名");
+        mTextView.setTextColor(Color.argb(0xff, 0x00, 0x00, 0x00));
+        mTextView.setTextSize(13);
+        mTextView.setPadding(4, 4, 4, 4);
+        mTextView.setLayoutParams(layoutParamsOfmChildOne);
+        mChildOne.addView(mTextView);
+
+        mEditText = new MClearEditText(this);
+        mEditText.setLayoutParams(layoutParamsOfmChildOne);
+        mEditText.setHint("请输入随行人姓名");
+        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)}); //最大输入长度
+        mEditText.setBackgroundResource(R.drawable.search_bg);
+        mEditText.setMinHeight(px2dip(mContext, 80));
+        mEditText.setTextSize(13);
+        mEditText.setPadding(10, 10, 10, 10);
+        mChildOne.addView(mEditText);
+
+
+        mTextView = new TextView(this);
+        mTextView.setGravity(Gravity.CENTER | Gravity.LEFT);
+        mTextView.setText("随行人电话");
+        mTextView.setTextColor(Color.argb(0xff, 0x00, 0x00, 0x00));
+        mTextView.setTextSize(13);
+        mTextView.setPadding(4, 4, 4, 4);
+        mTextView.setLayoutParams(layoutParamsOfmChildTwo);
+        mChildTwo.addView(mTextView);
+
+        mEditText = new MClearEditText(this);
+        mEditText.setLayoutParams(layoutParamsOfmChildTwo);
+        mEditText.setHint("请输入随行人电话");
+        mEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)}); //最大输入长度
+        mEditText.setBackgroundResource(R.drawable.search_bg);
+        mEditText.setTextSize(13);
+        mEditText.setPadding(10, 10, 10, 10);
+        mChildTwo.addView(mEditText);
+
+        mImageViewDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCustomerLl.removeView(layout_sub_Lin);
+                if (mCustomerLl.getChildCount() == 0) {
+                    mCkSuixing.setChecked(false);
+                }
+            }
+        });
+        mImageViewAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateView();
+            }
+        });
+
+        return layout_sub_Lin;
+    }
+
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    public static int px2dip(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
 }
