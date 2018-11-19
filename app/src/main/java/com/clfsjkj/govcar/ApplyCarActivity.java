@@ -44,18 +44,27 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     public static final int IMAGE_ITEM_ADD = -1;
     public static final int REQUEST_CODE_SELECT = 100;
     public static final int REQUEST_CODE_PREVIEW = 101;
+    public static final int REQUEST_CODE_START = 0x000;
+    public static final int REQUEST_CODE_PATH = 0x001;
+    public static final int REQUEST_CODE_END = 0x002;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R.id.btn_query)
-    Button mBtnQuery;
     @BindView(R.id.customer_ll)
     LinearLayout mCustomerLl;
     @BindView(R.id.ck_suixing)
     CheckBox mCkSuixing;
     @BindView(R.id.spinner_car)
     Spinner mSpinnerCar;
+    @BindView(R.id.btn_car_start)
+    Button mBtnCarStart;
+    @BindView(R.id.btn_car_path)
+    Button mBtnCarPath;
+    @BindView(R.id.btn_car_destination)
+    Button mBtnCarDestination;
+    @BindView(R.id.btn_car_apply)
+    Button mBtnCarApply;
 
     private ImagePickerAdapter adapter;
     private ArrayList<ImageItem> selImageList; //当前选择的所有图片
@@ -251,13 +260,6 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
         }
     }
 
-    @OnClick(R.id.btn_query)
-    public void onViewClicked() {
-        Intent it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
-        startActivity(it);
-    }
-
-
     private void CreateView() {
         LinearLayout mLL = addView();
         mCustomerLl.addView(mLL);
@@ -380,4 +382,24 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
         return (int) (pxValue / scale + 0.5f);
     }
 
+    @OnClick({R.id.btn_car_start, R.id.btn_car_path, R.id.btn_car_destination, R.id.btn_car_apply})
+    public void onViewClicked(View view) {
+        Intent it = new Intent(ApplyCarActivity.this,BaiduMapPoiActivity.class);
+        switch (view.getId()) {
+            case R.id.btn_car_start:
+                it.putExtra("REQUEST_CODE",REQUEST_CODE_START);
+                startActivityForResult(it,REQUEST_CODE_START);
+                break;
+            case R.id.btn_car_path:
+                it.putExtra("REQUEST_CODE",REQUEST_CODE_PATH);
+                startActivityForResult(it,REQUEST_CODE_PATH);
+                break;
+            case R.id.btn_car_destination:
+                it.putExtra("REQUEST_CODE",REQUEST_CODE_END);
+                startActivityForResult(it,REQUEST_CODE_END);
+                break;
+            case R.id.btn_car_apply:
+                break;
+        }
+    }
 }

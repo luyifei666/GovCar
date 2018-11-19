@@ -1,6 +1,7 @@
 package com.clfsjkj.govcar;
 
 import android.Manifest;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
@@ -69,6 +71,8 @@ import butterknife.ButterKnife;
 
 public class BaiduMapPoiActivity extends BaseActivity implements SensorEventListener, OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
 
+    private int mRequestCode = 0;
+
     @BindView(R.id.searchkey)
     AutoCompleteTextView mSearchkey;
     private ArrayAdapter<String> sugAdapter = null;
@@ -117,6 +121,8 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         mSetting = new PermissionSetting(this);
         permission();
         initMyToolBar();
+        Intent intent = getIntent();
+        mRequestCode = intent.getIntExtra("REQUEST_CODE",0);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);//获取传感器管理服务
         mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
 
@@ -191,7 +197,10 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
                                             //Poi 单击事件回调方法，比如点击到地图上面的商店，公交车站，地铁站等等公共场所
                                             @Override
                                             public boolean onMapPoiClick(MapPoi mapPoi) {
+                                                String POIName = mapPoi.getName();//POI点名称
+                                                LatLng POIPosition = mapPoi.getPosition();//POI点坐标
                                                 Log.e("TAG", "点击到地图上的POI物体了！名称：" + mapPoi.getName() + ",Uid:" + mapPoi.getUid());
+                                                Log.e("TAG", "POIName：" + POIName + ",POIPosition:" + POIPosition);
                                                 return true;
                                             }
                                         }
@@ -304,7 +313,14 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();//返回
+                if (mSearchkey.getText().toString().isEmpty()||mRequestCode == 0){
+                    finish();//返回
+                }else {
+                    Intent intent = new Intent();
+                    String location = mSearchkey.getText().toString().trim();
+                    intent.putExtra("location", location); //将计算的值回传回去
+                    setResult(mRequestCode);
+                }
             }
         });
     }
@@ -334,7 +350,6 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
         }
     }
-
 
     private void requestPermission(String... permissions) {
         AndPermission.with(this)
@@ -392,13 +407,13 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
             overlay.addToMap();
             overlay.zoomToSpan();
 
-            switch( searchType ) {
-                case 3:
-//                    showBound(searchBound);
-                    break;
-                default:
-                    break;
-            }
+//            switch( searchType ) {
+//                case 3:
+////                    showBound(searchBound);
+//                    break;
+//                default:
+//                    break;
+//            }
             return;
         }
 
@@ -463,7 +478,7 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     }
 
     @Override
-    public void onGetSuggestionResult(SuggestionResult res) {
+    public void onGetSuggestionResult(final SuggestionResult res) {
         if (res == null || res.getAllSuggestions() == null) {
             return;
         }
@@ -478,6 +493,15 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         sugAdapter = new ArrayAdapter<>(BaiduMapPoiActivity.this, android.R.layout.simple_dropdown_item_1line,
                 suggest);
         mSearchkey.setAdapter(sugAdapter);
+        mSearchkey.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SuggestionResult.SuggestionInfo info = res.getAllSuggestions().get(position);
+                //String uid = info.uid;
+                mPoiSearch.searchPoiDetail((new PoiDetailSearchOption())//去搜索该POI的详情->onGetPoiDetailResult(PoiDetailResult result)
+                        .poiUid(info.uid));
+            }
+        });
         sugAdapter.notifyDataSetChanged();
     }
 

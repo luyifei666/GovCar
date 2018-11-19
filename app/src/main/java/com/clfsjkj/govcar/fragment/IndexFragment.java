@@ -121,7 +121,7 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
         submit.setText("编辑");
         recyclerViewExist = (RecyclerView) view.findViewById(R.id.recyclerViewExist);
         horizonLScrollView = (HorizontalScrollView) view.findViewById(R.id.horizonLScrollView);
-        horizonLScrollView.setVisibility(View.GONE);
+//        horizonLScrollView.setVisibility(View.GONE);
         rg_tab = (RadioGroup) view.findViewById(R.id.rg_tab);
         recyclerViewAll = (RecyclerView) view.findViewById(R.id.recyclerViewAll);
         sfUtils = new SFUtils(mContext);
