@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,9 +45,9 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     public static final int IMAGE_ITEM_ADD = -1;
     public static final int REQUEST_CODE_SELECT = 100;
     public static final int REQUEST_CODE_PREVIEW = 101;
-    public static final int REQUEST_CODE_START = 0x000;
-    public static final int REQUEST_CODE_PATH = 0x001;
-    public static final int REQUEST_CODE_END = 0x002;
+    public static final String REQUEST_CODE_START = "999";
+    public static final String REQUEST_CODE_PATH = "888";
+    public static final String REQUEST_CODE_END = "777";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.recyclerView)
@@ -65,6 +66,12 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     Button mBtnCarDestination;
     @BindView(R.id.btn_car_apply)
     Button mBtnCarApply;
+    @BindView(R.id.et_car_start)
+    MClearEditText mEtCarStart;
+    @BindView(R.id.et_car_path)
+    MClearEditText mEtCarPath;
+    @BindView(R.id.et_car_destination)
+    MClearEditText mEtCarDestination;
 
     private ImagePickerAdapter adapter;
     private ArrayList<ImageItem> selImageList; //当前选择的所有图片
@@ -75,6 +82,11 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     private Context mContext;
     private List<String> mSpinnerCarList = new ArrayList<String>();
     private ArrayAdapter<String> mSpinnerAdapter;
+
+    private String mSearchLat;//纬度
+    private String mSearchLon;//经度
+    private String addr;//地名
+    private String addrDes;//地址
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +250,7 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("aaa", "onActivityResult resultCode = " + resultCode + "resultCode == Integer.valueOf(REQUEST_CODE_START)" + (resultCode == Integer.valueOf(REQUEST_CODE_START)));
         if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
             //添加图片返回
             if (data != null && requestCode == REQUEST_CODE_SELECT) {
@@ -256,6 +269,44 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
                     selImageList.addAll(images);
                     adapter.setImages(selImageList);
                 }
+            }
+        } else if (resultCode == Integer.valueOf(REQUEST_CODE_START) && data != null) {
+            //出发地
+            mSearchLat = data.getStringExtra("lat");
+            mSearchLon = data.getStringExtra("lon");
+            addr = data.getStringExtra("addr");
+            addrDes = data.getStringExtra("addrDes");
+            Log.e("aaa", "onActivityResult mSearchLat = " + mSearchLat + ",mSearchLon = " + mSearchLon + ",addr = " + addr + ",addrDes = " + addrDes);
+            if (null == addrDes){
+                mEtCarStart.setText(addr);
+            }else {
+                mEtCarStart.setText(addrDes + addr);
+            }
+//            mEtCarPath.setText("mSearchLat = " + mSearchLat);
+//            mEtCarDestination.setText("mSearchLon = " + mSearchLon);
+        } else if (resultCode == Integer.valueOf(REQUEST_CODE_PATH)&& data != null) {
+            //途径地
+            mSearchLat = data.getStringExtra("lat");
+            mSearchLon = data.getStringExtra("lon");
+            addr = data.getStringExtra("addr");
+            addrDes = data.getStringExtra("addrDes");
+            Log.e("aaa", "onActivityResult mSearchLat = " + mSearchLat + ",mSearchLon = " + mSearchLon + ",addr = " + addr + ",addrDes = " + addrDes);
+            if (null == addrDes){
+                mEtCarPath.setText(addr);
+            }else {
+                mEtCarPath.setText(addrDes + addr);
+            }
+        } else if (resultCode == Integer.valueOf(REQUEST_CODE_END)&& data != null) {
+            //目的地
+            mSearchLat = data.getStringExtra("lat");
+            mSearchLon = data.getStringExtra("lon");
+            addr = data.getStringExtra("addr");
+            addrDes = data.getStringExtra("addrDes");
+            Log.e("aaa", "onActivityResult mSearchLat = " + mSearchLat + ",mSearchLon = " + mSearchLon + ",addr = " + addr + ",addrDes = " + addrDes);
+            if (null == addrDes){
+                mEtCarDestination.setText(addr);
+            }else {
+                mEtCarDestination.setText(addrDes + addr);
             }
         }
     }
@@ -384,19 +435,25 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
 
     @OnClick({R.id.btn_car_start, R.id.btn_car_path, R.id.btn_car_destination, R.id.btn_car_apply})
     public void onViewClicked(View view) {
-        Intent it = new Intent(ApplyCarActivity.this,BaiduMapPoiActivity.class);
+        Intent it;
         switch (view.getId()) {
             case R.id.btn_car_start:
-                it.putExtra("REQUEST_CODE",REQUEST_CODE_START);
-                startActivityForResult(it,REQUEST_CODE_START);
+                it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
+                it.putExtra("REQUEST_CODE", REQUEST_CODE_START);
+                it.putExtra("TITLE", "请选择起始地");
+                startActivityForResult(it, 999);
                 break;
             case R.id.btn_car_path:
-                it.putExtra("REQUEST_CODE",REQUEST_CODE_PATH);
-                startActivityForResult(it,REQUEST_CODE_PATH);
+                it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
+                it.putExtra("REQUEST_CODE", REQUEST_CODE_PATH);
+                it.putExtra("TITLE", "请选择途径");
+                startActivityForResult(it, 999);
                 break;
             case R.id.btn_car_destination:
-                it.putExtra("REQUEST_CODE",REQUEST_CODE_END);
-                startActivityForResult(it,REQUEST_CODE_END);
+                it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
+                it.putExtra("REQUEST_CODE", REQUEST_CODE_END);
+                it.putExtra("TITLE", "请选择目的地");
+                startActivityForResult(it, 999);
                 break;
             case R.id.btn_car_apply:
                 break;

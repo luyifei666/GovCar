@@ -9,7 +9,6 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,6 +16,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -32,10 +34,11 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.search.core.CityInfo;
@@ -44,7 +47,6 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiBoundSearchOption;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailSearchResult;
@@ -71,7 +73,14 @@ import butterknife.ButterKnife;
 
 public class BaiduMapPoiActivity extends BaseActivity implements SensorEventListener, OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
 
-    private int mRequestCode = 0;
+    @BindView(R.id.myloc)
+    ImageView mMyloc;
+    @BindView(R.id.btn_back)
+    Button mBtnBack;
+    @BindView(R.id.btn_ok)
+    TextView mBtnOk;
+    @BindView(R.id.titile)
+    TextView mTitile;
 
     @BindView(R.id.searchkey)
     AutoCompleteTextView mSearchkey;
@@ -81,8 +90,8 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     // 定位相关
     LocationClient mLocClient;
     public MyLocationListenner myListener = new MyLocationListenner();
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    //    @BindView(R.id.toolbar)
+//    Toolbar mToolbar;
     private MyLocationConfiguration.LocationMode mCurrentMode;
     BitmapDescriptor mCurrentMarker;
     private static final int accuracyCircleFillColor = 0xAAFFFF88;
@@ -90,20 +99,32 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     private SensorManager mSensorManager;
     private Double lastX = 0.0;
     private int mCurrentDirection = 0;
-    private double mCurrentLat = 0.0;//纬度
-    private double mCurrentLon = 0.0;//经度
+    private double mCurrentLat = 0.0;//当前定位纬度
+    private double mCurrentLon = 0.0;//当前定位经度
+    private double mSearchLat = 0.0;//搜索地点纬度
+    private double mSearchLon = 0.0;//搜索地点经度
     private String mProvince;//省份
     private String mCity;//城市
     private float mCurrentAccracy;
+    private BitmapDescriptor myIconLocation1;//图标1，当前位置的箭头图标
+    private MyOrientationListener myOrientationListener;//方向感应器类对象
 
-    MapView mMapView;
-    BaiduMap mBaiduMap;
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
     boolean isFirstLoc = true; // 是否首次定位
     private MyLocationData locData;
     private float direction;
     private int searchType = 0;  // 搜索的类型，区域搜索3,周边搜索2,城市内搜索1
     private int loadIndex = 0;
     private LatLngBounds searchBound;
+    private String titleStr;
+    private int mRequestCode = 0;
+    private String addr;
+    private String addrDes;
+    private String mAddrStr;
+    public static final int REQUEST_CODE_START = 999;
+    public static final int REQUEST_CODE_PATH = 888;
+    public static final int REQUEST_CODE_END = 777;
 
     /**
      * 动态权限
@@ -122,7 +143,10 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         permission();
         initMyToolBar();
         Intent intent = getIntent();
-        mRequestCode = intent.getIntExtra("REQUEST_CODE",0);
+        titleStr = intent.getStringExtra("TITLE");
+        mTitile.setText(titleStr);
+        mRequestCode = Integer.valueOf(intent.getStringExtra("REQUEST_CODE"));
+        Log.e("aaa", "titleStr = " + titleStr + " , mRequestCode = " + mRequestCode);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);//获取传感器管理服务
         mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
 
@@ -133,36 +157,6 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         // 初始化建议搜索模块，注册建议搜索事件监听
         mSuggestionSearch = SuggestionSearch.newInstance();
         mSuggestionSearch.setOnGetSuggestionResultListener(this);
-
-        View.OnClickListener btnClickListener = new View.OnClickListener() {
-            public void onClick(View v) {
-                switch (mCurrentMode) {
-                    case NORMAL:
-                        mCurrentMode = MyLocationConfiguration.LocationMode.FOLLOWING;
-                        mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-                                mCurrentMode, true, mCurrentMarker));
-                        MapStatus.Builder builder = new MapStatus.Builder();
-                        builder.overlook(0);
-                        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-                        break;
-                    case COMPASS:
-                        mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
-                        mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-                                mCurrentMode, true, mCurrentMarker));
-                        MapStatus.Builder builder1 = new MapStatus.Builder();
-                        builder1.overlook(0);
-                        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder1.build()));
-                        break;
-                    case FOLLOWING:
-                        mCurrentMode = MyLocationConfiguration.LocationMode.COMPASS;
-                        mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-                                mCurrentMode, true, mCurrentMarker));
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
 
         // 地图初始化
         mMapView = (MapView) findViewById(R.id.bmapView);
@@ -181,6 +175,21 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         option.setScanSpan(1000);
         mLocClient.setLocOption(option);
         mLocClient.start();
+        //初始化图标,BitmapDescriptorFactory是bitmap 描述信息工厂类.
+        myIconLocation1 = BitmapDescriptorFactory.fromResource(R.drawable.location_marker);
+        //配置定位图层显示方式,三个参数的构造器
+        MyLocationConfiguration configuration
+                = new MyLocationConfiguration(mCurrentMode, true, myIconLocation1);
+        //设置定位图层配置信息，只有先允许定位图层后设置定位图层配置信息才会生效，参见 setMyLocationEnabled(boolean)
+        mBaiduMap.setMyLocationConfigeration(configuration);
+        myOrientationListener = new MyOrientationListener(mContext);
+        //通过接口回调来实现实时方向的改变
+        myOrientationListener.setOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
+            @Override
+            public void onOrientationChanged(float x) {
+                mCurrentDirection = (int) x;
+            }
+        });
 
         sugAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         mSearchkey.setAdapter(sugAdapter);
@@ -191,7 +200,7 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
                                             //地图单击事件回调方法
                                             @Override
                                             public void onMapClick(LatLng latLng) {
-                                                Log.e("TAG", "点击到地图上了！纬度" + latLng.latitude + "经度" + latLng.longitude);
+                                                Log.e("aaa", "点击到地图上了！纬度" + latLng.latitude + "经度" + latLng.longitude);
                                             }
 
                                             //Poi 单击事件回调方法，比如点击到地图上面的商店，公交车站，地铁站等等公共场所
@@ -199,13 +208,20 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
                                             public boolean onMapPoiClick(MapPoi mapPoi) {
                                                 String POIName = mapPoi.getName();//POI点名称
                                                 LatLng POIPosition = mapPoi.getPosition();//POI点坐标
-                                                Log.e("TAG", "点击到地图上的POI物体了！名称：" + mapPoi.getName() + ",Uid:" + mapPoi.getUid());
-                                                Log.e("TAG", "POIName：" + POIName + ",POIPosition:" + POIPosition);
+                                                Log.e("aaa", "点击到地图上的POI物体了！名称：" + mapPoi.getName() + ",Uid:" + mapPoi.getUid());
+                                                Log.e("aaa", "POIName：" + POIName + ",POIPosition:" + POIPosition);
                                                 return true;
                                             }
                                         }
 
         );
+
+        mMyloc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocationByLL(mCurrentLat, mCurrentLon);
+            }
+        });
 
         /* 当输入关键字变化时，动态更新建议列表 */
         mSearchkey.addTextChangedListener(new TextWatcher() {
@@ -240,32 +256,32 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
 
     public void searchButtonProcess(String keystr, String citystr) {
 
-        List<String> mList = new ArrayList<>();
-        mList.add("昆明市");
-        mList.add("大理白族自治州");
-        mList.add("楚雄彝族自治州");
-        mList.add("红河哈尼族彝族自治州");
-        mList.add("文山壮族苗族自治州");
-        mList.add("曲靖市");
-        mList.add("玉溪市");
-        mList.add("昭通市");
-        mList.add("保山市");
-        mList.add("丽江市");
-        mList.add("普洱市");
-        mList.add("临沧市");
-        mList.add("德宏傣族景颇族自治州");
-        mList.add("怒江傈僳族自治州");
-        mList.add("迪庆藏族自治州");
-        mList.add("西双版纳傣族自治州");
-
-        for (int i = 0; i < mList.size(); i++) {
-            searchType = 1;
-            mPoiSearch.searchInCity((new PoiCitySearchOption())
-                    .city(mList.get(i).toString())
-                    .keyword(keystr)
-                    .pageNum(loadIndex)
-                    .scope(1));
-        }
+//        List<String> mList = new ArrayList<>();
+//        mList.add("昆明市");
+//        mList.add("大理白族自治州");
+//        mList.add("楚雄彝族自治州");
+//        mList.add("红河哈尼族彝族自治州");
+//        mList.add("文山壮族苗族自治州");
+//        mList.add("曲靖市");
+//        mList.add("玉溪市");
+//        mList.add("昭通市");
+//        mList.add("保山市");
+//        mList.add("丽江市");
+//        mList.add("普洱市");
+//        mList.add("临沧市");
+//        mList.add("德宏傣族景颇族自治州");
+//        mList.add("怒江傈僳族自治州");
+//        mList.add("迪庆藏族自治州");
+//        mList.add("西双版纳傣族自治州");
+//
+//        for (int i = 0; i < mList.size(); i++) {
+//            searchType = 1;
+//            mPoiSearch.searchInCity((new PoiCitySearchOption())
+//                    .city(mList.get(i))
+//                    .keyword(keystr)
+//                    .pageNum(loadIndex)
+//                    .scope(1));
+//        }
 
 
 //        searchType = 1;
@@ -275,21 +291,21 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
 //                .pageNum(loadIndex)
 //                .scope(1));
 
-//        LatLng southwest = new LatLng(mCurrentLat - 5, mCurrentLon - 5);
-//        LatLng northeast = new LatLng(mCurrentLat + 5, mCurrentLon + 5);
-//        searchBound = new LatLngBounds.Builder().include(southwest).include(northeast).build();
-//        mPoiSearch.searchInBound(new PoiBoundSearchOption()
-//                .bound(searchBound)
-//                .keyword(keystr)
-//                .scope(1));
+        LatLng southwest = new LatLng(86.290768, 18.103598);//将中国包起来
+        LatLng northeast = new LatLng(136.625773, 53.545176);//将中国包起来
+        searchBound = new LatLngBounds.Builder().include(southwest).include(northeast).build();
+        mPoiSearch.searchInBound(new PoiBoundSearchOption()
+                .bound(searchBound)
+                .keyword(keystr)
+                .scope(1));
     }
 
     /**
      * 对区域检索的范围进行绘制
      *
-     * @param bounds     区域检索指定区域
+     * @param bounds 区域检索指定区域
      */
-    public void showBound( LatLngBounds bounds) {
+    public void showBound(LatLngBounds bounds) {
         BitmapDescriptor bdGround = BitmapDescriptorFactory.fromResource(R.drawable.ground_overlay);
 
         OverlayOptions ooGround = new GroundOverlayOptions()
@@ -307,22 +323,51 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     }
 
     private void initMyToolBar() {
-        initToolBar(mToolbar, "POI搜索", R.drawable.gank_ic_back_white);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSearchkey.getText().toString().isEmpty()||mRequestCode == 0){
-                    finish();//返回
-                }else {
-                    Intent intent = new Intent();
-                    String location = mSearchkey.getText().toString().trim();
-                    intent.putExtra("location", location); //将计算的值回传回去
-                    setResult(mRequestCode);
-                }
+                finish();
             }
         });
+
+        mBtnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                if (mSearchkey.getText().toString().trim().isEmpty()) {
+                    intent.putExtra("lat", mCurrentLat + "");//纬度
+                    intent.putExtra("lon", mCurrentLon + "");//经度
+                    intent.putExtra("addr", addr);//地名
+                    intent.putExtra("addrDes", addrDes);//地址
+                } else {
+                    intent.putExtra("lat", mSearchLat + "");//纬度
+                    intent.putExtra("lon", mSearchLon + "");//经度
+                    intent.putExtra("addr", addr);//地名
+                    intent.putExtra("addrDes", addrDes);//地址
+                }
+                setResult(mRequestCode, intent);
+                finish();
+            }
+        });
+
+
+//        initToolBar(mToolbar, "POI搜索", R.drawable.gank_ic_back_white);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mSearchkey.getText().toString().isEmpty() || mRequestCode == 0) {
+//                    finish();//返回
+//                } else {
+//                    Intent intent = new Intent();
+//                    String location = mSearchkey.getText().toString().trim();
+//                    intent.putExtra("location", location); //将计算的值回传回去
+//                    setResult(mRequestCode);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -333,8 +378,10 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
             locData = new MyLocationData.Builder()
                     .accuracy(mCurrentAccracy)
                     // 此处设置开发者获取到的方向信息，顺时针0-360
-                    .direction(mCurrentDirection).latitude(mCurrentLat)
-                    .longitude(mCurrentLon).build();
+                    .direction(mCurrentDirection)
+                    .latitude(mCurrentLat)
+                    .longitude(mCurrentLon)
+                    .build();
             mBaiduMap.setMyLocationData(locData);
         }
         lastX = x;
@@ -375,16 +422,50 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     /**
      * 获取POI详情搜索结果，得到searchPoiDetail返回的搜索结果
      * V5.2.0版本之后，还方法废弃，使用{@link #onGetPoiDetailResult(PoiDetailSearchResult)}代替
-     * @param result    POI详情检索结果
+     *
+     * @param result POI详情检索结果
      */
     public void onGetPoiDetailResult(PoiDetailResult result) {
         if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(BaiduMapPoiActivity.this, "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BaiduMapPoiActivity.this, "抱歉，未找到结果396", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(BaiduMapPoiActivity.this,
-                    result.getName() + ": " + result.getAddress(),
+                    "line 399 --- " + result.getName() + ": " + result.getAddress(),
                     Toast.LENGTH_SHORT).show();
+            addr = result.getName();
+            addrDes = result.getAddress();
+            mSearchLat = result.location.latitude;
+            mSearchLon = result.location.longitude;
+            Log.e("aaa", "mSeachLat = " + mSearchLat + ",mSeachLon = " + mSearchLon);
+            getLocationByLL(mSearchLat, mSearchLon);
+            drawMarker(mSearchLat, mSearchLon);
         }
+    }
+
+    /*
+     *根据经纬度前往
+     */
+    public void getLocationByLL(double la, double lg) {
+        //地理坐标的数据结构
+        LatLng latLng = new LatLng(la, lg);
+        //描述地图状态将要发生的变化,通过当前经纬度来使地图显示到该位置
+        MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+        mBaiduMap.setMapStatus(msu);
+    }
+
+    public void drawMarker(double la, double lg) {
+        LatLng latLng = new LatLng(la, lg);
+        // 构建Marker图标
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
+        // 构建MarkerOption，用于在地图上添加Marker.
+        OverlayOptions options = new MarkerOptions().position(latLng).icon(bitmapDescriptor);
+        // 在地图上添加Marker，并显示
+        //mBaiduMap.addOverlay(options);
+        Marker marker = (Marker) (mBaiduMap.addOverlay(options));
+
+        //描述地图状态将要发生的变化,通过当前经纬度来使地图显示到该位置
+        MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+        mBaiduMap.setMapStatus(msu);
     }
 
     /**
@@ -407,13 +488,13 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
             overlay.addToMap();
             overlay.zoomToSpan();
 
-//            switch( searchType ) {
-//                case 3:
-////                    showBound(searchBound);
-//                    break;
-//                default:
-//                    break;
-//            }
+            switch (searchType) {
+                case 3:
+                    showBound(searchBound);
+                    break;
+                default:
+                    break;
+            }
             return;
         }
 
@@ -448,8 +529,6 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     /**
      * 获取POI详情搜索结果，得到searchPoiDetail返回的搜索结果
      * V5.2.0版本之后，还方法废弃，使用{@link #onGetPoiDetailResult(PoiDetailSearchResult)}代替
-     *
-     * @param result POI详情检索结果
      */
     public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
         if (poiDetailSearchResult.error != SearchResult.ERRORNO.NO_ERROR) {
@@ -465,7 +544,7 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
                 PoiDetailInfo poiDetailInfo = poiDetailInfoList.get(i);
                 if (null != poiDetailInfo) {
                     Toast.makeText(BaiduMapPoiActivity.this,
-                            poiDetailInfo.getName() + ": " + poiDetailInfo.getAddress(),
+                            "line 484 :" + poiDetailInfo.getName() + ": " + poiDetailInfo.getAddress(),
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -526,7 +605,16 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
                 //当前设备位置所在的市
                 mCity = location.getCity();
                 Log.e("aaa", "省 = " + mProvince + ",城市 = " + mCity);
-                String mAddrStr = location.getAddrStr();
+                mAddrStr = location.getAddrStr();
+                if (mRequestCode == REQUEST_CODE_START) {
+                    mSearchkey.setHint(mAddrStr);
+                } else if (mRequestCode == REQUEST_CODE_PATH) {
+                    mSearchkey.setHint("请搜索途径地");
+                } else if (mRequestCode == REQUEST_CODE_END) {
+                    mSearchkey.setHint("请搜索目的地");
+                }
+                addr = mAddrStr;
+                addrDes = location.getLocationDescribe();
                 Log.e("aaa", "mAddrStr = " + mAddrStr);
                 String mCountry = location.getCountry();
                 Log.e("aaa", "mCountry = " + mCountry);
@@ -580,7 +668,22 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
     protected void onStop() {
         //取消注册传感器监听
         mSensorManager.unregisterListener(this);
+        //停止定位
+        mBaiduMap.setMyLocationEnabled(false);
+        mLocClient.stop();
+        myOrientationListener.stop();
         super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        //开启定位，显示位置图标
+//        mBaiduMap.setMyLocationEnabled(true);
+//        if (!mLocClient.isStarted()) {
+//            mLocClient.start();
+//        }
+        myOrientationListener.start();
+        super.onStart();
     }
 
     @Override
