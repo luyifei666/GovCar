@@ -10,12 +10,10 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,7 +44,7 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends BaseActivity {
 
-//    @BindView(R.id.toolbar)
+    //    @BindView(R.id.toolbar)
 //    Toolbar mToolbar;
     private String mUpdateUrl1 = "https://raw.githubusercontent.com/WVector/AppUpdateDemo/master/json/json1.txt";
     private Context context;
@@ -124,6 +122,8 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         context = this;
         initMyToolBar();
+        setStatusBarFullTransparent();
+        setFitSystemWindow(true);
         // 初始化页卡
         initPager();
         setTabs(tabLayout, getLayoutInflater(), TAB_TITLES, TAB_IMGS);
@@ -214,7 +214,7 @@ public class MainActivity extends BaseActivity {
 
     public void permission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermission(Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION);
+            requestPermission(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
 //            AndPermission.with(this)
 //                    .permission(Manifest.permission.RECORD_AUDIO)
 //                    .rationale(mRationale)
@@ -240,7 +240,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-
     private void requestPermission(String... permissions) {
         AndPermission.with(this)
                 .permission(permissions)
@@ -262,7 +261,6 @@ public class MainActivity extends BaseActivity {
                 })
                 .start();
     }
-
 
     /**
      * 设置页卡显示效果

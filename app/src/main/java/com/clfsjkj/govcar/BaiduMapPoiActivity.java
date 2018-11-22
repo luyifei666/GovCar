@@ -142,6 +142,8 @@ public class BaiduMapPoiActivity extends BaseActivity implements SensorEventList
         mSetting = new PermissionSetting(this);
         permission();
         initMyToolBar();
+        setStatusBarFullTransparent();
+        setFitSystemWindow(true);
         Intent intent = getIntent();
         titleStr = intent.getStringExtra("TITLE");
         mTitile.setText(titleStr);

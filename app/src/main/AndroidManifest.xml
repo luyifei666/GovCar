@@ -129,9 +129,7 @@
         </activity>
         <activity android:name=".ApplyRecordActivity">
         </activity>
-        <activity android:name=".DistrictSearchDemo">
-        </activity>
-        <activity android:name=".PoiSearchDemo">
+        <activity android:name=".ApplayOrderDetailActivity">
         </activity>
     </application>
 

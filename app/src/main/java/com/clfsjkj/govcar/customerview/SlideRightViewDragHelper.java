@@ -37,7 +37,7 @@ public class SlideRightViewDragHelper extends LinearLayout {
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
                 //只有滑动到距离右边100dp时才执行，否则回弹
-                if (oldX > screenWidth - 100) {
+                if (oldX > screenWidth - 200) {
                     viewDragHelper.settleCapturedViewAt(childEndPosition.x, childEndPosition.y);
                     invalidate(); //必须刷新,因为其内部使用的是mScroller.startScroll，所以别忘了需要invalidate()以及结合computeScroll方法一起。
                     if (onReleasedListener != null)

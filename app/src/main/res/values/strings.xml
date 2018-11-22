@@ -21,4 +21,5 @@
     <string name="message_permission_always_failed">我们需要以下权限，请在设置中为我们开启:\n\n%1$s</string>
     <!-- 消息成功率统计： 通道将消息转发给SDK后，SDK通知通道消息已接收到 -->
     <string name="hwpush_ability_value" translatable="false">successRateAnalytics</string>
+    <string name="network_err">Simulation network error</string>
 </resources>

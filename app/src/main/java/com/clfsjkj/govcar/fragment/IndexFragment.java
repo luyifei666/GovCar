@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -26,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clfsjkj.govcar.ApplyCarActivity;
+import com.clfsjkj.govcar.ApplyRecordActivity;
 import com.clfsjkj.govcar.DriverActivity;
 import com.clfsjkj.govcar.R;
 import com.clfsjkj.govcar.adapter.MsgContentFragmentAdapter;
@@ -42,14 +40,11 @@ import com.clfsjkj.govcar.index.SpaceItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * 通讯录
  * <p>展示居中位置的tab页卡</p>
  */
-public class IndexFragment extends BaseFragment implements View.OnClickListener{
+public class IndexFragment extends BaseFragment implements View.OnClickListener {
 
     private RecyclerView recyclerViewExist, recyclerViewAll;
 
@@ -99,12 +94,12 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (submit.getText().equals("编辑")){
+                if (submit.getText().equals("编辑")) {
                     submit.setText("保存");
                     isEdit = true;
                     blockAdapter.setEdit(isEdit);
                     functionAdapter.setEdit(isEdit);
-                }else if (submit.getText().equals("保存")){
+                } else if (submit.getText().equals("保存")) {
                     submit.setText("编辑");
                     isEdit = false;
                     blockAdapter.setEdit(isEdit);
@@ -116,7 +111,7 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
     }
 
     public void init(View view) {
-        title = (RelativeLayout)view.findViewById(R.id.title);
+        title = (RelativeLayout) view.findViewById(R.id.title);
         submit = view.findViewById(R.id.submit);
         submit.setText("编辑");
         recyclerViewExist = (RecyclerView) view.findViewById(R.id.recyclerViewExist);
@@ -155,7 +150,6 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
         itemWidth = getAtyWidth(mContext) / 4 + dip2px(mContext, 2);
 
         resetEditHeight(selData.size());
-
 
 
         initTab();
@@ -203,22 +197,31 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
         });
 
 
-
 //----------------------------------------------------------自己加的点击事件------------------------------------------------------------------
         functionAdapter.setOnItemClickLitener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(mContext,"functionAdapter position = " + position,Toast.LENGTH_SHORT).show();
-                it = new Intent(mContext,ApplyCarActivity.class);
-                startActivity(it);
+                switch (position % 2) {
+                    case 0:
+                        Toast.makeText(mContext, "functionAdapter position = " + position, Toast.LENGTH_SHORT).show();
+                        it = new Intent(mContext, ApplyCarActivity.class);
+                        startActivity(it);
+                        break;
+                    case 1:
+                        it = new Intent(mContext, ApplyRecordActivity.class);
+                        startActivity(it);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
         blockAdapter.setOnItemClickLitener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(mContext,"blockAdapter position = " + position,Toast.LENGTH_SHORT).show();
-                it = new Intent(mContext,DriverActivity.class);
+                Toast.makeText(mContext, "blockAdapter position = " + position, Toast.LENGTH_SHORT).show();
+                it = new Intent(mContext, DriverActivity.class);
                 startActivity(it);
             }
         });
@@ -276,7 +279,7 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
                         rb.setGravity(Gravity.CENTER);
                         rb.setText(item.name);
                         rb.setTag(item.subItemCount);
-                        Log.e("aaa","item.subItemCount = " + item.subItemCount);
+                        Log.e("aaa", "item.subItemCount = " + item.subItemCount);
                         rb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         try {
                             rb.setTextColor(getResources().getColorStateList(R.color.bg_block_text));
@@ -304,7 +307,7 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
                 if (!currentTab.equals(text) && isChecked) {
                     currentTab = text;
                     moveToPosition(position);
-                    Log.e("aaa","position = " + position);
+                    Log.e("aaa", "position = " + position);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -340,18 +343,18 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
             return;
         if (position <= first) {      //移动到前面
             gridManager.scrollToPosition(position);
-            Log.e("aaa","移动到前面 position = " + position);
+            Log.e("aaa", "移动到前面 position = " + position);
         } else if (position >= end) {      //移动到后面
             isMove = true;
             scrollPosition = position;
             gridManager.smoothScrollToPosition(recyclerViewAll, null, position);
-            Log.e("aaa","移动到前面 position = " + position);
+            Log.e("aaa", "移动到前面 position = " + position);
         } else {//中间部分
             int n = position - gridManager.findFirstVisibleItemPosition();
             if (n > 0 && n < allData.size()) {
                 int top = gridManager.findViewByPosition(position).getTop();
                 recyclerViewAll.scrollBy(0, top);
-                Log.e("aaa","移动到前面 position = " + position);
+                Log.e("aaa", "移动到前面 position = " + position);
             }
         }
     }
@@ -360,11 +363,11 @@ public class IndexFragment extends BaseFragment implements View.OnClickListener{
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            Log.e("aaa","279  onScrollStateChanged" );
+            Log.e("aaa", "279  onScrollStateChanged");
             try {
                 if (isMove && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     isMove = false;
-                    Log.e("aaa","newState = " + newState);
+                    Log.e("aaa", "newState = " + newState);
                     View view = gridManager.findViewByPosition(scrollPosition);
                     if (view != null) {
                         int top = (int) view.getTop();

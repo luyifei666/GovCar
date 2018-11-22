@@ -9,8 +9,14 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.clfsjkj.govcar.imageloader.GlideImageLoader;
+import com.clfsjkj.govcar.utils.Utils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.view.CropImageView;
+import com.zhy.http.okhttp.OkHttpUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 
 public final class MainApplication extends Application {
@@ -30,6 +36,15 @@ public final class MainApplication extends Application {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+        Utils.init(this);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+
+        OkHttpUtils.initClient(okHttpClient);
         initImagePicker();
     }
 

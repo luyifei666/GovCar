@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
@@ -16,6 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/backgroundColor"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -331,7 +333,9 @@
                 <RelativeLayout
                     android:id="@+id/rl_car_start"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:gravity="center"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@id/btn_car_start"
@@ -347,8 +351,8 @@
                         android:background="@null"
                         android:hint="请选择出发地"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
                         android:textSize="13sp"/>
                 </RelativeLayout>
 
@@ -382,7 +386,9 @@
                 <RelativeLayout
                     android:id="@+id/rl_car_path"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:gravity="center"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/btn_car_path"
@@ -398,8 +404,8 @@
                         android:background="@null"
                         android:hint="请选择出发地"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
                         android:textSize="13sp"/>
                 </RelativeLayout>
 
@@ -433,7 +439,9 @@
                 <RelativeLayout
                     android:id="@+id/rl_car_destination"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:gravity="center"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/btn_car_destination"
@@ -449,8 +457,8 @@
                         android:background="@null"
                         android:hint="请选择出发地"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
                         android:textSize="13sp"/>
                 </RelativeLayout>
 
@@ -507,14 +515,15 @@
                     android:layout_toRightOf="@id/tv_car_start_time"
                     android:background="@drawable/search_bg">
 
-                    <com.clfsjkj.govcar.customerview.MClearEditText
-                        android:id="@+id/et_car_start_time"
+                    <TextView
+                        android:id="@+id/tv_start_time"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:background="@null"
                         android:hint="请选择用车时间"
+                        android:gravity="center|left"
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLines="1"
@@ -534,7 +543,7 @@
                     android:layout_width="80dp"
                     android:layout_height="40dp"
                     android:gravity="left"
-                    android:text="选择车辆"
+                    android:text="回车时间"
                     android:textSize="13sp"/>
 
                 <RelativeLayout
@@ -547,14 +556,15 @@
                     android:layout_toRightOf="@id/tv_car_back_time"
                     android:background="@drawable/search_bg">
 
-                    <com.clfsjkj.govcar.customerview.MClearEditText
-                        android:id="@+id/et_car_back_time"
+                    <TextView
+                        android:id="@+id/tv_back_time"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:background="@null"
                         android:hint="请选择回车时间"
+                        android:gravity="center|left"
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLines="1"
@@ -576,7 +586,7 @@
                     android:layout_alignParentLeft="true"
                     android:gravity="left"
                     android:paddingLeft="18dp"
-                    android:text="请选择用车时间"
+                    android:text="请填写用车事由"
                     android:textSize="15sp"
                     android:textStyle="bold"/>
 
@@ -607,7 +617,9 @@
                 <RelativeLayout
                     android:id="@+id/rl_car_reason"
                     android:layout_width="270dp"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:gravity="center"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
@@ -623,8 +635,8 @@
                         android:background="@null"
                         android:hint="请填写用车事由"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
                         android:textSize="13sp"/>
                 </RelativeLayout>
 
@@ -647,7 +659,9 @@
                 <RelativeLayout
                     android:id="@+id/rl_car_remark"
                     android:layout_width="270dp"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:gravity="center"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
@@ -663,8 +677,8 @@
                         android:background="@null"
                         android:hint="请填写备注信息"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
                         android:textSize="13sp"/>
                 </RelativeLayout>
 

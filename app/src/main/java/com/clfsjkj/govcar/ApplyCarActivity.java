@@ -1,9 +1,11 @@
 package com.clfsjkj.govcar;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,16 +14,22 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.clfsjkj.govcar.adapter.ImagePickerAdapter;
 import com.clfsjkj.govcar.base.BaseActivity;
 import com.clfsjkj.govcar.customerview.MClearEditText;
@@ -33,7 +41,9 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 import com.lzy.imagepicker.view.CropImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,6 +58,21 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     public static final String REQUEST_CODE_START = "999";
     public static final String REQUEST_CODE_PATH = "888";
     public static final String REQUEST_CODE_END = "777";
+
+    private ImagePickerAdapter adapter;
+    private ArrayList<ImageItem> selImageList; //当前选择的所有图片
+    private int maxImgCount = 8;               //允许选择图片最大数
+    private MClearEditText mEditText;
+    private TextView mTextView;
+    private ImageView mImageViewAdd, mImageViewDel;
+    private Context mContext;
+    private List<String> mSpinnerCarList = new ArrayList<String>();
+    private ArrayAdapter<String> mSpinnerAdapter;
+    private String mSearchLat;//纬度
+    private String mSearchLon;//经度
+    private String addr;//地名
+    private String addrDes;//地址
+    private TimePickerView pvTime;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.recyclerView)
@@ -72,21 +97,10 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
     MClearEditText mEtCarPath;
     @BindView(R.id.et_car_destination)
     MClearEditText mEtCarDestination;
-
-    private ImagePickerAdapter adapter;
-    private ArrayList<ImageItem> selImageList; //当前选择的所有图片
-    private int maxImgCount = 8;               //允许选择图片最大数
-    private MClearEditText mEditText;
-    private TextView mTextView;
-    private ImageView mImageViewAdd, mImageViewDel;
-    private Context mContext;
-    private List<String> mSpinnerCarList = new ArrayList<String>();
-    private ArrayAdapter<String> mSpinnerAdapter;
-
-    private String mSearchLat;//纬度
-    private String mSearchLon;//经度
-    private String addr;//地名
-    private String addrDes;//地址
+    @BindView(R.id.tv_start_time)
+    TextView mTvStartTime;
+    @BindView(R.id.tv_back_time)
+    TextView mTvBackTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +109,8 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
         ButterKnife.bind(this);
         mContext = this;
         initMyToolBar();
+        setStatusBarFullTransparent();
+        setFitSystemWindow(true);
         //最好放到 Application oncreate执行
         initImagePicker();
         initWidget();
@@ -277,35 +293,35 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
             addr = data.getStringExtra("addr");
             addrDes = data.getStringExtra("addrDes");
             Log.e("aaa", "onActivityResult mSearchLat = " + mSearchLat + ",mSearchLon = " + mSearchLon + ",addr = " + addr + ",addrDes = " + addrDes);
-            if (null == addrDes){
+            if (null == addrDes) {
                 mEtCarStart.setText(addr);
-            }else {
+            } else {
                 mEtCarStart.setText(addrDes + addr);
             }
 //            mEtCarPath.setText("mSearchLat = " + mSearchLat);
 //            mEtCarDestination.setText("mSearchLon = " + mSearchLon);
-        } else if (resultCode == Integer.valueOf(REQUEST_CODE_PATH)&& data != null) {
+        } else if (resultCode == Integer.valueOf(REQUEST_CODE_PATH) && data != null) {
             //途径地
             mSearchLat = data.getStringExtra("lat");
             mSearchLon = data.getStringExtra("lon");
             addr = data.getStringExtra("addr");
             addrDes = data.getStringExtra("addrDes");
             Log.e("aaa", "onActivityResult mSearchLat = " + mSearchLat + ",mSearchLon = " + mSearchLon + ",addr = " + addr + ",addrDes = " + addrDes);
-            if (null == addrDes){
+            if (null == addrDes) {
                 mEtCarPath.setText(addr);
-            }else {
+            } else {
                 mEtCarPath.setText(addrDes + addr);
             }
-        } else if (resultCode == Integer.valueOf(REQUEST_CODE_END)&& data != null) {
+        } else if (resultCode == Integer.valueOf(REQUEST_CODE_END) && data != null) {
             //目的地
             mSearchLat = data.getStringExtra("lat");
             mSearchLon = data.getStringExtra("lon");
             addr = data.getStringExtra("addr");
             addrDes = data.getStringExtra("addrDes");
             Log.e("aaa", "onActivityResult mSearchLat = " + mSearchLat + ",mSearchLon = " + mSearchLon + ",addr = " + addr + ",addrDes = " + addrDes);
-            if (null == addrDes){
+            if (null == addrDes) {
                 mEtCarDestination.setText(addr);
-            }else {
+            } else {
                 mEtCarDestination.setText(addrDes + addr);
             }
         }
@@ -433,30 +449,122 @@ public class ApplyCarActivity extends BaseActivity implements ImagePickerAdapter
         return (int) (pxValue / scale + 0.5f);
     }
 
-    @OnClick({R.id.btn_car_start, R.id.btn_car_path, R.id.btn_car_destination, R.id.btn_car_apply})
+    @OnClick({R.id.btn_car_start, R.id.btn_car_path, R.id.btn_car_destination, R.id.btn_car_apply, R.id.tv_start_time, R.id.tv_back_time})
     public void onViewClicked(View view) {
         Intent it;
         switch (view.getId()) {
-            case R.id.btn_car_start:
+            case R.id.btn_car_start://起始地
                 it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
                 it.putExtra("REQUEST_CODE", REQUEST_CODE_START);
                 it.putExtra("TITLE", "请选择起始地");
                 startActivityForResult(it, 999);
                 break;
-            case R.id.btn_car_path:
+            case R.id.btn_car_path://途径地
                 it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
                 it.putExtra("REQUEST_CODE", REQUEST_CODE_PATH);
                 it.putExtra("TITLE", "请选择途径");
                 startActivityForResult(it, 999);
                 break;
-            case R.id.btn_car_destination:
+            case R.id.btn_car_destination://目的地
                 it = new Intent(ApplyCarActivity.this, BaiduMapPoiActivity.class);
                 it.putExtra("REQUEST_CODE", REQUEST_CODE_END);
                 it.putExtra("TITLE", "请选择目的地");
                 startActivityForResult(it, 999);
                 break;
+            case R.id.tv_start_time://出车时间
+                initStartTime();
+                pvTime.show(); //弹出自定义时间选择器
+                break;
+            case R.id.tv_back_time://回车时间
+                initEndTime();
+                pvTime.show(); //弹出自定义时间选择器
+                break;
             case R.id.btn_car_apply:
+                String mStartTime = mTvStartTime.getText().toString();
+                String mBackTime = mTvBackTime.getText().toString();
+                int res = mStartTime.compareTo(mBackTime);
+                if (res > 0) {
+                    Log.e("aaa", "mStartTime>mBackTime");
+                    Snackbar snackbar = Snackbar.make(mBtnCarApply, "回车时间不能小于出车时间", Snackbar.LENGTH_SHORT);
+                    snackbar.getView().setBackgroundResource(R.color.colorPrimary);
+                    snackbar.show();
+                } else if (res == 0) {
+                    Log.e("aaa", "mStartTime=mBackTime");
+                } else {
+                    Log.e("aaa", "mStartTime<mBackTime");
+                }
                 break;
         }
+
+    }
+
+    private void initStartTime() {
+        pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                mTvStartTime.setText(getTime(date));
+            }
+        })
+                .setType(new boolean[]{true, true, true, true, true, true})
+                .isDialog(true)
+                .build();
+
+        Dialog mDialog = pvTime.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvTime.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+        pvTime.show();
+    }
+
+    private void initEndTime() {
+        pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                mTvBackTime.setText(getTime(date));
+            }
+        })
+                .setType(new boolean[]{true, true, true, true, true, true})
+                .isDialog(true)
+                .build();
+
+        Dialog mDialog = pvTime.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvTime.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+        pvTime.show();
+    }
+
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        Log.d("aaa)", "choice date millis: " + date.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
     }
 }

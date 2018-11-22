@@ -83,4 +83,6 @@ dependencies {
     implementation 'org.xutils:xutils:3.3.36'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.lzy.widget:view-core:0.2.1'
+    //pick view
+    implementation 'com.contrarywind:Android-PickerView:4.1.6'
 }
